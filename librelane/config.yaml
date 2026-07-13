@@ -90,15 +90,15 @@ GRT_RESIZER_HOLD_MAX_BUFFER_PCT: 70
 
 # Increase density for more 
 # logic on your die
-PL_TARGET_DENSITY_PCT: 35
+PL_TARGET_DENSITY_PCT: 30
 GRT_ALLOW_CONGESTION: true
 
 # Allow a larger Y displacement
 PL_MAX_DISPLACEMENT_Y: 200
 
 # Fix antenna violations after DRT
-DRT_ANTENNA_REPAIR_ITERS: 10
-DRT_ANTENNA_REPAIR_MARGIN: 10 # %
+DRT_ANTENNA_REPAIR_ITERS: 20
+DRT_ANTENNA_REPAIR_MARGIN: 15 # %
 
 # PDN
 PDN_CFG: dir::pdn/pdn_cfg.tcl

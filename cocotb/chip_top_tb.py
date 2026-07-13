@@ -24,12 +24,20 @@ hdl_toplevel = "chip_top"
 
 async def set_defaults(dut):
     dut.input_PAD.value = 0
+    dut.bidir_PAD.value[6:0] = 0
+    dut.bidir_PAD.value[7] = 1 # tex_pmod_type=1 (Digilent) allows us to set gen_texb=0
+    dut.bidir_PAD.value[13] = 0 # gen_texb=0
+    dut.bidir_PAD.value[15:14] = 0
+    dut.bidir_PAD.value[12] = 0
+    dut.bidir_PAD.value[10] = 0
+    dut.bidir_PAD.value[9] = 0
+    
 
 async def enable_power(dut):
     dut.VDD.value = 1
     dut.VSS.value = 0
 
-async def start_clock(clock, freq=50):
+async def start_clock(clock, freq=40):
     """Start the clock @ freq MHz"""
     c = Clock(clock, 1 / freq * 1000, "ns")
     cocotb.start_soon(c.start())
@@ -56,8 +64,8 @@ async def start_up(dut):
 
 
 @cocotb.test()
-async def test_counter(dut):
-    """Run the counter test"""
+async def test_raybox_zero(dut):
+    """Run a basic raybox_zero test"""
 
     # Create a logger for this testbench
     logger = logging.getLogger("my_testbench")
@@ -77,14 +85,14 @@ async def test_counter(dut):
     # bidir_PAD vector into individual bits through a tb wrapper.
     # Even better, use individual pad names for each bit.
 
-    # Start the counter by setting all inputs to 1
-    dut.input_PAD.value = -1
+    # # Start the counter by setting all inputs to 1
+    # dut.input_PAD.value = -1
 
     # Wait for a number of clock cycles
     await ClockCycles(dut.clk_PAD, 100)
 
-    # Check the end result of the counter
-    assert dut.bidir_PAD.value == 100 - 1
+    # # Check the end result of the counter
+    # assert dut.bidir_PAD.value == 100 - 1
 
     logger.info("Done!")
 
@@ -115,14 +123,29 @@ def chip_top_runner():
         defines.update({"FUNCTIONAL": True, "USE_POWER_PINS": True})
     else:
         sources.append(proj_path / "../src/chip_top.sv")
+        sources.append(proj_path / "../src/rbz_options.v")
+        sources.append(proj_path / "../src/raybox-zero/src/rtl/fixed_point_params.v")
+        sources.append(proj_path / "../src/raybox-zero/src/rtl/helpers.v")
+        sources.append(proj_path / "../src/raybox-zero/src/rtl/doors.v")
+        sources.append(proj_path / "../src/raybox-zero/src/rtl/rbzero.v")
+        sources.append(proj_path / "../src/raybox-zero/src/rtl/spi_registers.v")
+        sources.append(proj_path / "../src/raybox-zero/src/rtl/debug_overlay.v")
+        sources.append(proj_path / "../src/raybox-zero/src/rtl/map_overlay.v")
+        sources.append(proj_path / "../src/raybox-zero/src/rtl/map_rom.v")
+        sources.append(proj_path / "../src/raybox-zero/src/rtl/lzc.v")
+        sources.append(proj_path / "../src/raybox-zero/src/rtl/reciprocal.v")
+        sources.append(proj_path / "../src/raybox-zero/src/rtl/wall_tracer.v")
+        sources.append(proj_path / "../src/raybox-zero/src/rtl/row_render.v")
+        sources.append(proj_path / "../src/raybox-zero/src/rtl/vga_mux.v")
+        sources.append(proj_path / "../src/raybox-zero/src/rtl/vga_sync.v")
         sources.append(proj_path / "../src/chip_core.sv")
 
     sources += [
         # IO pad models
         Path(pdk_root) / pdk / f"libs.ref/{pad}/verilog/{pad}.v",
         
-        # SRAM macros
-        Path(pdk_root) / pdk / f"libs.ref/{sram}/verilog/{sram}__sram512x8m8wm1.v",
+        # # SRAM macros
+        # Path(pdk_root) / pdk / f"libs.ref/{sram}/verilog/{sram}__sram512x8m8wm1.v",
         
         # Custom IP
         proj_path / "../ip/gf180mcu_ws_ip__logo/vh/gf180mcu_ws_ip__logo.v",
