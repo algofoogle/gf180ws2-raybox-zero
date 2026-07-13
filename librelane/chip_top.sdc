@@ -80,3 +80,26 @@ if { [info exists ::env(OPENLANE_SDC_IDEAL_CLOCKS)] && $::env(OPENLANE_SDC_IDEAL
     set_propagated_clock [all_clocks]
 }
 
+
+#ANTON: This is an attempt to ignore all timing paths that pass through the reciprocal combo block
+# inside rcp_fsm. We assume its outputs are always valid when used.
+# set_false_path -through rbzero.wall_tracer.rcp_fsm.*
+set_false_path -through chip_core.rbzero.wall_tracer.rcp_fsm.operand*
+# set_false_path -through rbzero.wall_tracer.rcp_fsm.abs # <= not used; optimised out.
+# #ANTON: This specifies that we don't care about timing on these external signals that typically don't change:
+# set_false_path -from [get_ports {bidir_PAD[3]}]
+# set_false_path -from [get_ports {bidir_PAD[4]}]
+# set_false_path -from [get_ports {bidir_PAD[5]}]
+# set_false_path -from [get_ports {bidir_PAD[6]}]
+# set_false_path -from [get_ports {bidir_PAD[7]}]
+
+#ANTON: This specifies that STA should assume outputs are ALWAYS
+# registered. We might still choose to test it with unregistered
+# outputs, but if it doesn't work: no worries. Registered is still best :)
+set_case_analysis 1 [get_ports {bidir_PAD[6]}]
+
+#ANTON: More stuff that is assumed not to change, typically:
+set_case_analysis 0 [get_ports {bidir_PAD[3]}] ; # debug
+set_case_analysis 0 [get_ports {bidir_PAD[4]}] ; # inc_px
+set_case_analysis 0 [get_ports {bidir_PAD[5]}] ; # inc_py
+set_case_analysis 0 [get_ports {bidir_PAD[7]}] ; # tex_pmod_type=>Tiny VGA

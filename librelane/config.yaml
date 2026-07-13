@@ -21,17 +21,33 @@ meta:
 
     # Save time during development
     # Enable for sign-off
-    #OpenROAD.IRDropReport: null
-    #Magic.DRC: null
-    #Checker.MagicDRC: null
-    #KLayout.XOR: null
-    #Netgen.LVS: null
-    #Checker.LVS: null
+    OpenROAD.IRDropReport: null
+    Magic.DRC: null
+    Checker.MagicDRC: null
+    KLayout.XOR: null
+    Netgen.LVS: null
+    Checker.LVS: null
 
 DESIGN_NAME: chip_top
 VERILOG_FILES:
 - dir::../src/chip_top.sv
+- dir::../src/rbz_options.v
+- dir::../src/raybox-zero/src/rtl/fixed_point_params.v
+- dir::../src/raybox-zero/src/rtl/helpers.v
+- dir::../src/raybox-zero/src/rtl/doors.v
+- dir::../src/raybox-zero/src/rtl/rbzero.v
+- dir::../src/raybox-zero/src/rtl/spi_registers.v
+- dir::../src/raybox-zero/src/rtl/debug_overlay.v
+- dir::../src/raybox-zero/src/rtl/map_overlay.v
+- dir::../src/raybox-zero/src/rtl/map_rom.v
+- dir::../src/raybox-zero/src/rtl/lzc.v
+- dir::../src/raybox-zero/src/rtl/reciprocal.v
+- dir::../src/raybox-zero/src/rtl/wall_tracer.v
+- dir::../src/raybox-zero/src/rtl/row_render.v
+- dir::../src/raybox-zero/src/rtl/vga_mux.v
+- dir::../src/raybox-zero/src/rtl/vga_sync.v
 - dir::../src/chip_core.sv
+
 
 # Enable plugin for better SystemVerilog support
 # USE_SLANG: True
