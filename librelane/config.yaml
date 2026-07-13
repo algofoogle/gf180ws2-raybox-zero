@@ -21,12 +21,12 @@ meta:
 
     # Save time during development
     # Enable for sign-off
-    OpenROAD.IRDropReport: null
-    Magic.DRC: null
-    Checker.MagicDRC: null
-    KLayout.XOR: null
-    Netgen.LVS: null
-    Checker.LVS: null
+    #OpenROAD.IRDropReport: null
+    #Magic.DRC: null
+    #Checker.MagicDRC: null
+    #KLayout.XOR: null
+    #Netgen.LVS: null
+    #Checker.LVS: null
 
 DESIGN_NAME: chip_top
 VERILOG_FILES:
@@ -83,8 +83,10 @@ CLOCK_NET: clk_pad/Y
 CLOCK_PERIOD: 40 # 25 MHz
 
 # Overfix hold violations
-PL_RESIZER_HOLD_SLACK_MARGIN: 0.35
-GRT_RESIZER_HOLD_SLACK_MARGIN: 0.3
+PL_RESIZER_HOLD_SLACK_MARGIN: 0.40
+GRT_RESIZER_HOLD_SLACK_MARGIN: 0.35
+PL_RESIZER_HOLD_MAX_BUFFER_PCT: 70
+GRT_RESIZER_HOLD_MAX_BUFFER_PCT: 70
 
 # Increase density for more 
 # logic on your die

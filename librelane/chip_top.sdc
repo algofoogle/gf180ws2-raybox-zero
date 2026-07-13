@@ -84,7 +84,27 @@ if { [info exists ::env(OPENLANE_SDC_IDEAL_CLOCKS)] && $::env(OPENLANE_SDC_IDEAL
 #ANTON: This is an attempt to ignore all timing paths that pass through the reciprocal combo block
 # inside rcp_fsm. We assume its outputs are always valid when used.
 # set_false_path -through rbzero.wall_tracer.rcp_fsm.*
-set_false_path -through chip_core.rbzero.wall_tracer.rcp_fsm.operand*
+# set_false_path -through chip_core.rbzero.wall_tracer.rcp_fsm.operand*
+
+
+set rcp_operand_nets [get_nets -hierarchical {i_chip_core.rbzero.wall_tracer.rcp_fsm.operand*}]
+
+puts "Found [llength $rcp_operand_nets] reciprocal operand nets"
+
+set rcp_op_net_count [llength $rcp_operand_nets]
+
+if {$rcp_op_net_count == 0} {
+    error "Could not find reciprocal operand nets"
+}
+
+if {$rcp_op_net_count != 22} {
+    puts "WARNING: Expected 22 rcp_fsm operand nets, but found $rcp_op_net_count"
+}
+
+set_false_path -through $rcp_operand_nets
+
+
+# set_false_path -through [get_nets -hierarchical {i_chip_core.rbzero.wall_tracer.rcp_fsm.operand*}]
 # set_false_path -through rbzero.wall_tracer.rcp_fsm.abs # <= not used; optimised out.
 # #ANTON: This specifies that we don't care about timing on these external signals that typically don't change:
 # set_false_path -from [get_ports {bidir_PAD[3]}]
@@ -103,3 +123,19 @@ set_case_analysis 0 [get_ports {bidir_PAD[3]}] ; # debug
 set_case_analysis 0 [get_ports {bidir_PAD[4]}] ; # inc_px
 set_case_analysis 0 [get_ports {bidir_PAD[5]}] ; # inc_py
 set_case_analysis 0 [get_ports {bidir_PAD[7]}] ; # tex_pmod_type=>Tiny VGA
+
+# set rcp_launch_regs [get_cells -hierarchical {*rcp_fsm/operand[*]}]
+
+# set rcp_capture_regs [get_cells -hierarchical {*rcp_fsm/o_data[*]}]
+
+# set rcp_launch_q [get_pins -of_objects $rcp_launch_regs -filter {name == Q}]
+
+# set rcp_capture_d [get_pins -of_objects $rcp_capture_regs -filter {name == D}]
+
+# set_multicycle_path 4 -setup \
+#     -from $rcp_launch_q \
+#     -to   $rcp_capture_d
+
+# set_multicycle_path 3 -hold \
+#     -from $rcp_launch_q \
+#     -to   $rcp_capture_d
