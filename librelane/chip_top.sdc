@@ -116,7 +116,7 @@ set_false_path -through $rcp_operand_nets
 #ANTON: This specifies that STA should assume outputs are ALWAYS
 # registered. We might still choose to test it with unregistered
 # outputs, but if it doesn't work: no worries. Registered is still best :)
-set_case_analysis 1 [get_ports {bidir_PAD[6]}]
+set_case_analysis 1 [get_ports {bidir_PAD[6]}] ; # reg
 
 #ANTON: More stuff that is assumed not to change, typically:
 set_case_analysis 0 [get_ports {bidir_PAD[3]}] ; # debug
