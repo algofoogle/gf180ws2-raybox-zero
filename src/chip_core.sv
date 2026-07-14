@@ -88,8 +88,7 @@
 //  25  vblank
 //  26  hmax
 //  27  vmax
-//  28  visible
-//  29  frame_end
+//  37:28  vpos
 
 
 
@@ -194,6 +193,9 @@ module chip_core #(
 
     assign bidir_oe[23:16] = '1; // All 1 (outputs).
     ////////////////////////////////////////////////////////////////////
+
+    assign bidir_out[37:28] = vpos;
+    assign bidir_oe[37:28] = '1;
 
 
     logic _unused;
@@ -318,8 +320,8 @@ module chip_core #(
 
     // Set the bidir as output
     // assign bidir_oe = '1; // 1=Output (for all). This syntax is equivalent to: assign bidir_oe={NUM_BIDIR_PADS{1'b1}};
-    assign bidir_oe[NUM_BIDIR_PADS-1:28] = '0; // Higher pads are unused inputs.
-    assign bidir_out[NUM_BIDIR_PADS-1:28] = '0;
+    assign bidir_oe[NUM_BIDIR_PADS-1:38] = '0; // Higher pads are unused inputs.
+    assign bidir_out[NUM_BIDIR_PADS-1:38] = '0;
     assign bidir_out[7:0] = '0;
     assign bidir_ie = ~bidir_oe; // Enable input buffers only on pads that are inputs.
     assign bidir_cs = '0; // 0=CMOS buffer.
