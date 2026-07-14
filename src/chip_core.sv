@@ -178,7 +178,11 @@ module chip_core #(
     wire hblank, hmax;
     wire vblank, vmax;
 
-    always @(posedge clk) registered_vga_output <= unregistered_vga_output;
+    always @(posedge clk)
+        if (~rst_n)
+            registered_vga_output <= '0;
+        else
+            registered_vga_output <= unregistered_vga_output;
 
     assign bidir_out[23:16] = i_reg ? registered_vga_output : unregistered_vga_output;
 
