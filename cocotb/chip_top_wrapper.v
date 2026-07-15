@@ -59,20 +59,22 @@ module chip_top_wrapper #(
     wire hsync_n    = bidir_PAD[23];
     wire vsync_n    = bidir_PAD[19];
 
-    // wire tex_csb    = bidir_PAD[8+0];
+    wire tex_csb    = bidir_PAD[8+0];
     // wire tex_out0   = bidir_PAD[8+1];
-    // wire tex_sclk   = bidir_PAD[8+3];
+    wire tex_sclk   = bidir_PAD[8+3];
 
-    // wire [2:0] tex_io;
+    wire [3:0] tex_io;
 
-    // // 8+0 is an output.
-    // assign bidir_PAD[8+1] = tex_io[0]; //NOTE: Bidirectional function.
-    // assign bidir_PAD[8+2] = tex_io[1];
+    // 8+0 is an output.
+    // Unconditionally short tex_io[0] and bidir_PAD[8+1] together:
+    tran tex_io0_connection (tex_io[0], bidir_PAD[8+1]); //NOTE: Bidirectional function.
+    // assign bidir_PAD[8+1] = tex_io[0]; 
+    assign bidir_PAD[8+2] = tex_io[1];
     // 8+3 is an output
     assign bidir_PAD[8+4] = 1'b0; // SPARE input.
     assign bidir_PAD[8+5] = gen_texb;
-    // assign bidir_PAD[8+6] = tex_io[2];
-    assign bidir_PAD[8+7] = 1'b0; // UNUSED tex_io[3]
+    assign bidir_PAD[8+6] = tex_io[2];
+    assign bidir_PAD[8+7] = tex_io[3]; // UNUSED.
 
 
     chip_top chip_top(
@@ -87,6 +89,16 @@ module chip_top_wrapper #(
         .input_PAD      (input_PAD),
         .bidir_PAD      (bidir_PAD),
         .analog_PAD     (analog_PAD)
+    );
+
+    // Connect our relevant TT pins to our texture SPI flash ROM:
+    W25Q128JVxIM texture_rom(
+        .DIO    (tex_io[0]),  // SPI io0 (MOSI) - BIDIRECTIONAL
+        .DO     (tex_io[1]),  // SPI io1 (MISO)
+        .WPn    (tex_io[2]),  // SPI io2
+        .HOLDn  (tex_io[3]),  // SPI io3. //NOTE: Not used in raybox-zero.
+        .CSn    (tex_csb),    // SPI /CS
+        .CLK    (tex_sclk)    // SPI SCLK
     );
 
 endmodule

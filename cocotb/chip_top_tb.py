@@ -219,8 +219,8 @@ async def reset(reset, active_low=True, time_ns=1000):
 #     await reset(dut.rst_n)
 
 def set_gen_texb(dut, state):
-    # dut.gen_texb.value = state
-    dut.gen_texb.value = 0 # FORCED ON FOR NOW.
+    dut.gen_texb.value = state
+    # dut.gen_texb.value = 0 # FORCED ON FOR NOW.
 
 
 @cocotb.test()
@@ -578,6 +578,7 @@ def chip_top_runner():
         sources.append(proj_path / "../final/pnl/chip_top.pnl.v")
         sources.append(proj_path / "../src/generated_defines.svh")
         sources.append(proj_path / "../src/slot_defines.svh")
+        sources.append(proj_path / "texture_rom/W25Q128JVxIM.v")
         sources.append(proj_path / "chip_top_wrapper.v")
 
         defines.update({"FUNCTIONAL": True, "USE_POWER_PINS": True})
@@ -599,6 +600,7 @@ def chip_top_runner():
         sources.append(proj_path / "../src/raybox-zero/src/rtl/vga_mux.v")
         sources.append(proj_path / "../src/raybox-zero/src/rtl/vga_sync.v")
         sources.append(proj_path / "../src/chip_core.sv")
+        sources.append(proj_path / "texture_rom/W25Q128JVxIM.v")
         sources.append(proj_path / "chip_top_wrapper.v")
 
     sources += [
