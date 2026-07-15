@@ -574,8 +574,8 @@ def chip_top_runner():
 
         # We use the powered netlist
         # sources.append(proj_path / f"../final/pnl/{hdl_toplevel}.pnl.v")
-        # sources.append(proj_path / "../final/pnl/chip_top.pnl.v")
-        sources.append(proj_path / "../chip_top_dummy.pnl.v")
+        # sources.append(proj_path / "../chip_top_dummy.pnl.v")
+        sources.append(proj_path / "../final/pnl/chip_top.pnl.v")
         sources.append(proj_path / "../src/generated_defines.svh")
         sources.append(proj_path / "../src/slot_defines.svh")
         sources.append(proj_path / "chip_top_wrapper.v")

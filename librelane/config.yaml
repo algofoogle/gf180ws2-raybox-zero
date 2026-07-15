@@ -48,6 +48,7 @@ VERILOG_FILES:
 - dir::../src/raybox-zero/src/rtl/vga_sync.v
 - dir::../src/chip_core.sv
 
+SYNTH_STRATEGY: "DELAY 2"
 
 # Enable plugin for better SystemVerilog support
 # USE_SLANG: True
